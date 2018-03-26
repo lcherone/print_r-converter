@@ -24,7 +24,8 @@
 /**
  * print_r Parser
  */
-function PrintrParser($buffer) {
+function PrintrParser($buffer)
+{
     $result = null;
     $rP     = & $result;
     $rS     = array();
