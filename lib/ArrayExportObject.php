@@ -26,7 +26,8 @@
  */
 class ArrayExportObject extends ArrayObject
 {
-    public function offsetGet($index) {
+    public function offsetGet($index)
+    {
         $value = parent::offsetGet($index);
 
         if (is_array($value)) {
@@ -35,7 +36,8 @@ class ArrayExportObject extends ArrayObject
         return $value;
     }
 
-    public function hasChildren() {
+    public function hasChildren()
+    {
         foreach ($this as $value) {
             if (is_array($value)) {
                 return true;
@@ -49,8 +51,8 @@ class ArrayExportObject extends ArrayObject
      *
      * @return bool
      */
-    public function isArray() {
-
+    public function isArray()
+    {
         $keys = array_keys($this->getArrayCopy());
         if (!$keys) {
             return true;

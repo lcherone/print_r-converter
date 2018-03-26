@@ -26,12 +26,13 @@
  */
 class ArrayExporter
 {
-    public function export($array) {
+    public function export($array)
+    {
         $export       = new ArrayExportObject($array);
         $omitNewLines = !$export->hasChildren();
 
         if ($omitNewLines) {
-            $buffer[]       = 'array(';
+            $buffer[]       = '[';
             $count          = count($array);
             $virtKeyPointer = 0;
             foreach ($array as $key => $value) {
@@ -39,14 +40,11 @@ class ArrayExporter
                 $virtKey = $virtKeyPointer === $key;
                 is_int($key) && $virtKeyPointer++;
 
-                $buffer[] = ($virtKey ? '' : var_export($key, true) . ' => ')
-                    . var_export($value, true)
-                    . ($count ? ', ' : '');
+                $buffer[] = ($virtKey ? '' : var_export($key, true) . ' => ').var_export($value, true).($count ? ', ' : '');
             }
-            $buffer[] = ')';
+            $buffer[] = ']';
             return implode('', $buffer);
         }
-
 
         $buffer         = array();
         $virtKeyPointer = 0;
@@ -55,19 +53,17 @@ class ArrayExporter
             $virtKey     = $virtKeyPointer === $key;
             is_int($key) && $virtKeyPointer++;
 
-            $buffer[] = ($virtKey ? '' : var_export($key, true) . ' => ')
-                .
-                (
+            $buffer[] = ($virtKey ? '' : var_export($key, true) . ' => ').(
                 $hasChildren
-                    ? ltrim(StringLines::createFromString($this->export($value))->indent('    '))
-                    : var_export($value, true)
-                )
-                . ',';
+                ? ltrim(StringLines::createFromString($this->export($value))->indent('    '))
+                : var_export($value, true)
+            ). ',';
         }
 
         $buffer = new StringLines($buffer);
         $buffer->indent('    ');
-        $buffer->wrapLines('array(', ')');
+        $buffer->wrapLines('[', ']');
+        
         return $buffer->getString();
     }
 }

@@ -30,36 +30,43 @@ class StringLines
      * @var array
      */
     private $lines;
+    
     /**
      * @var string
      */
     private $lineSeperator = "\n";
 
-    public function __construct(array $lines = array(), $lineSeparator = "\n") {
+    public function __construct(array $lines = array(), $lineSeparator = "\n")
+    {
         $this->lines = $lines;
         $this->lineSeperator = (string) $lineSeparator;
     }
 
-    public function setLineSeperator($lineSeperator) {
+    public function setLineSeperator($lineSeperator)
+    {
         $this->lineSeperator = $lineSeperator;
     }
 
-    public function setString($string) {
+    public function setString($string)
+    {
         $this->string = $string;
     }
 
-    public function getString() {
+    public function getString()
+    {
         return implode($this->lineSeperator, $this->lines);
     }
 
-    public function indent($by) {
+    public function indent($by)
+    {
         foreach($this->lines as &$line) {
             $line = $by . $line;
         }
         return $this;
     }
 
-    public function addLine($line) {
+    public function addLine($line)
+    {
         $this->lines[] = $line;
     }
 
@@ -69,14 +76,16 @@ class StringLines
         $this->lines[] = $last;
     }
 
-    function __toString() {
+    function __toString()
+    {
         return implode($this->lineSeperator, $this->lines);
     }
 
     /**
      * @return array
      */
-    public function getLines() {
+    public function getLines()
+    {
         return $this->lines;
     }
 

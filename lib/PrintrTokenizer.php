@@ -27,24 +27,28 @@
 class PrintrTokenizer implements Iterator
 {
     private $tokens = array(
-        'array-open'  => 'Array\s*\(\s?$',
-        'object-open' => 'stdClass Object\s*\($',
-        'key'         => '\s*\[[^\]]+\]',
-        'map'         => ' => ',
-        'array-close' => '\s*\)\s?$',
-        'value'       => '(?<= => )[^\n]*$',
-        'leadws'      => '^\s+',
+        'array-open'   => 'Array\s*\(\s?$',
+        'object-open'  => 'stdClass Object\s*\($',
+        'anon-open'    => 'class\@anonymous\s*Object',
+        'closure-open' => 'Closure\s*Object',
+        'key'          => '\s*\[[^\]]+\]',
+        'map'          => ' => ',
+        'array-close'  => '\s*\)\s?$',
+        'value'        => '(?<= => )[^\n]*',
+        'leadws'       => '^\s+',
     );
     private $buffer;
     private $offset;
     private $index;
     private $current;
 
-    public function __construct($buffer) {
+    public function __construct($buffer)
+    {
         $this->buffer = $buffer;
     }
 
-    private function match($def, $at) {
+    private function match($def, $at)
+    {
         $found = preg_match(
             "~$def~im", $this->buffer, $match, PREG_OFFSET_CAPTURE, $at
         );
@@ -59,7 +63,8 @@ class PrintrTokenizer implements Iterator
         return $return;
     }
 
-    private function matchLargest($at) {
+    private function matchLargest($at)
+    {
         $match = $max = 0;
         foreach ($this->tokens as $name => $def) {
             ($len = $this->match($def, $at))
@@ -70,15 +75,18 @@ class PrintrTokenizer implements Iterator
         return $match ? array($match, $at, $max) : null;
     }
 
-    public function current() {
+    public function current()
+    {
         return $this->current;
     }
 
-    public function key() {
+    public function key()
+    {
         return $this->index;
     }
 
-    public function next() {
+    public function next()
+    {
         $current = $this->matchLargest($this->offset);
         ($current)
             && ($current = array_merge($current, array(substr($this->buffer, $this->offset, $current[2]))))
@@ -87,11 +95,13 @@ class PrintrTokenizer implements Iterator
         $this->index++;
     }
 
-    public function valid() {
+    public function valid()
+    {
         return !(null === $this->current);
     }
 
-    public function rewind() {
+    public function rewind()
+    {
         $this->offset = 0;
         $this->next();
         $this->index = 0;

@@ -44,6 +44,14 @@ function PrintrParser($buffer) {
                 $rP    = new stdClass();
                 $state = 0;
                 break;
+            case 'closure-open':
+                $rP    = new stdClass();
+                $state = 0;
+                break;
+            case 'anon-open':
+                $rP    = new stdClass();
+                $state = 0;
+                break;
             case 'key':
                 if (1 === $state) { // empty value
                     $rP  = '';
@@ -73,6 +81,7 @@ function PrintrParser($buffer) {
                 ((string)(int)$text === $text) && $text = (int)$text;
                 ((string)(float)$text === $text) && $text = (float)$text;
                 $rP = $text;
+                
             # fall-through intended
             case 'array-close':
                 $rSi = count($rS) - 1;
